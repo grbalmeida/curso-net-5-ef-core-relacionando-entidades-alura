@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace FilmesAPI.Data.Dtos.Cinema
+namespace FilmesAPI.Data.Dtos
 {
     public class ReadCinemaDto
     {
@@ -12,6 +12,6 @@ namespace FilmesAPI.Data.Dtos.Cinema
         [Required(ErrorMessage = "O campo {0} é obrigatório")]
         public string Nome { get; set; }
 
-        public object Endereco { get; set; }
+        public ReadEnderecoDto Endereco { get; set; }
     }
 }
