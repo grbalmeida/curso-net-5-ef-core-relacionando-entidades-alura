@@ -13,5 +13,6 @@ namespace FilmesAPI.Data.Dtos
         public string Nome { get; set; }
 
         public ReadEnderecoDto Endereco { get; set; }
+        public ReadGerenteDto Gerente { get; set; }
     }
 }
