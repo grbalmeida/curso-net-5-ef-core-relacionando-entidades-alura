@@ -44,5 +44,21 @@ namespace FilmesAPI.Controllers
 
             return NotFound();
         }
+
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeletaGerente(int id)
+        {
+            var gerente = await _context.Gerentes.FirstOrDefaultAsync(gerente => gerente.Id == id);
+
+            if (gerente == null)
+            {
+                return NotFound();
+            }
+
+            _context.Gerentes.Remove(gerente);
+            await _context.SaveChangesAsync();
+
+            return NoContent();
+        }
     }
 }
