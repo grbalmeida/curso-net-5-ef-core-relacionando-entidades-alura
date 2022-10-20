@@ -24,6 +24,6 @@ namespace FilmesAPI.Models
         public int Duracao { get; set; }
 
         public int ClassificacaoEtaria { get; set; }
-        public virtual List<Cinema> Cinemas { get; set; }
+        public virtual List<Sessao> Sessoes { get; set; }
     }
 }
