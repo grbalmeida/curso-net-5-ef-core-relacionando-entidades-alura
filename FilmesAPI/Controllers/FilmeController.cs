@@ -5,6 +5,8 @@ using FilmesAPI.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace FilmesAPI.Controllers
@@ -33,9 +35,26 @@ namespace FilmesAPI.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> RecuperarFilmes()
+        public async Task<IActionResult> RecuperaFilmes([FromQuery] int? classificacaoEtaria = null)
         {
-            return Ok(await _context.Filmes.ToListAsync());
+            List<Filme> filmes;
+
+            if (classificacaoEtaria == null)
+            {
+                filmes = await _context.Filmes.ToListAsync();
+            }
+            else
+            {
+                filmes = await _context.Filmes.Where(filme => filme.ClassificacaoEtaria <= classificacaoEtaria).ToListAsync();
+            }
+
+            if (filmes != null)
+            {
+                var filmesDto = _mapper.Map<List<ReadFilmeDto>>(filmes);
+                return Ok(filmesDto);
+            }
+
+            return NotFound();
         }
 
         [HttpGet("{id}")]
