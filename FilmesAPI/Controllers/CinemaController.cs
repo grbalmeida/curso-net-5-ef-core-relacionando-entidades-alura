@@ -5,6 +5,7 @@ using FilmesAPI.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace FilmesAPI.Controllers
@@ -33,9 +34,31 @@ namespace FilmesAPI.Controllers
         }
 
         [HttpGet]
-        public async Task<IEnumerable<Cinema>> RecuperaCinemas([FromQuery] string nomeDoFilme)
+        public async Task<IActionResult> RecuperaCinemas([FromQuery] string nomeDoFilme)
         {
-            return await _context.Cinemas.ToListAsync();
+            var cinemasQuery = _context.Cinemas.AsQueryable();
+
+            if (!string.IsNullOrEmpty(nomeDoFilme))
+            {
+                cinemasQuery = cinemasQuery.Where(cinema => cinema.Sessoes.Any(sessao =>
+                    sessao.Filme.Titulo.Contains(nomeDoFilme)));
+
+                //var query = from cinema in cinemas
+                //        where cinema.Sessoes.Any(sessao =>
+                //        sessao.Filme.Titulo.Contains(nomeDoFilme))
+                //        select cinema;
+            }
+
+            var cinemas = await cinemasQuery.ToListAsync();
+
+            if (cinemas == null || cinemas.Count == 0)
+            {
+                return NotFound();
+            }
+
+            var cinemasDto = _mapper.Map<List<ReadCinemaDto>>(cinemas);
+
+            return Ok(cinemasDto);
         }
 
         [HttpGet("{id}")]

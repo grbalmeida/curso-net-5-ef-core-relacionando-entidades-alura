@@ -48,7 +48,7 @@ namespace FilmesAPI.Controllers
                 filmes = await _context.Filmes.Where(filme => filme.ClassificacaoEtaria <= classificacaoEtaria).ToListAsync();
             }
 
-            if (filmes != null)
+            if (filmes != null && filmes.Count > 0)
             {
                 var filmesDto = _mapper.Map<List<ReadFilmeDto>>(filmes);
                 return Ok(filmesDto);

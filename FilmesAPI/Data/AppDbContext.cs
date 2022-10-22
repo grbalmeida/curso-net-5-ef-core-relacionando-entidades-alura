@@ -1,5 +1,6 @@
 ﻿using FilmesAPI.Models;
 using Microsoft.EntityFrameworkCore;
+using System;
 
 namespace FilmesAPI.Data
 {
@@ -32,6 +33,9 @@ namespace FilmesAPI.Data
                 .WithMany(cinema => cinema.Sessoes)
                 .HasForeignKey(sessao => sessao.CinemaId);
         }
+
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+            => optionsBuilder.LogTo(Console.WriteLine);
 
         public DbSet<Filme> Filmes { get; set; }
         public DbSet<Cinema> Cinemas { get; set; }
